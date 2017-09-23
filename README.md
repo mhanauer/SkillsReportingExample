@@ -39,11 +39,18 @@ dat = cbind(datStatic, datNonStatic)
 head(dat)
 ```
 The following items will be measured on a monthly basis for one year: costs, revenues, peopleServed
-```{r}
+```{r, echo=FALSE}
 set.seed(12345)
 costs = rnorm(12, 10000, 100)
 revenues = rnorm(12, 10000, 200)
 peopleServed = round(rnorm(12,100,5), 0)
 datMonthly = as.data.frame(cbind(costs, revenues, peopleServed)); datMonthly
+
+```
+Plots for aggregate
+```{r}
+library(ggplot2)
+ggplot(datMonthly, aes(x = costs)) +
+  geom_histogram()
 ```
 
