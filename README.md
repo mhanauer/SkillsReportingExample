@@ -7,6 +7,10 @@ Means for each: treatment, onTimeDoc, fidelity, peopleServed, costs, revenues, o
 
 Rep what is static four times then we can add the time variable.  Or create four columns named one through four then use the long package.
 ```{r}
+library(Hmisc)
+library(dplyr)
+library(lme4)
+library(nlme)
 # Do everything that is static first 
 treatmentSamp = c(1,2,3,4)
 genderSamp = c(1,0)
@@ -38,12 +42,41 @@ datNonStatic = cbind(onTimeDoc, fidelity, outcome1, outcome2, time)
 dat = cbind(datStatic, datNonStatic)
 head(dat)
 ```
-The following items will be measured on a monthly basis for one year: costs, revenues, peopleServed
-```{r}
+The following items will be measured on a monthly basis for one year: costs, revenues, peopleServed, time (in months)
+```{r, echo=FALSE}
 set.seed(12345)
-costs = rnorm(12, 10000, 100)
-revenues = rnorm(12, 10000, 200)
+costs = round(rnorm(12, 10000, 100))
+revenues = round(rnorm(12, 10000, 200))
 peopleServed = round(rnorm(12,100,5), 0)
-datMonthly = as.data.frame(cbind(costs, revenues, peopleServed)); datMonthly
+time  = 1:12
+datMonthly = data.frame(cbind(costs, revenues, peopleServed, time)); datMonthly
+head(dat)
+```
+Graphs
+Outcomes 1 and 2 over
+Outcomes 1 and 2 over time by treatments 
+OnTimeDocs over time (percentage)
+OnTimeDocs over treatment (percentage)
+Fidelity over time (percentage)
+Fiedlity over treatment (percentage)
+I want to break fiedlity up by time and treatment
+```{r}
+#This sets the background
+theme_set(theme_grey(base_size = 12))
+library(ggplot2)
+# This gets the labels and the points on the labels but not the data
+ggplot(data = datMonthly, aes(x = time, y = costs))
+# Here we are adding the data on the plot with geom_point()
+ggplot(data = datMonthly, aes(x = time, y = costs)) + geom_point()
+head(dat)
+ggplot(data = dat, aes(x = time, y = outcome1), geom_point())+ geom_point(aes(color = treatment))
+#Histogram for continous items
+ggplot(dat, aes(x = outcome1)) + geom_histogram() 
+ggplot(dat, aes(x = outcome1)) + geom_freqpoly()
+ggplot(dat, aes(x = outcome1)) + geom_density()
+#Plot of of number of fidelity success for each group
+ggplot(dat, aes(x = fidelity)) + geom_bar()
+ggplot(dat, aes(time)) + geom_line(aes(y = outcome1)) + geom_line(aes(y = outcome2))
+
 ```
 
