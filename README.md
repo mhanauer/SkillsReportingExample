@@ -5,9 +5,9 @@ output:
   pdf_document: default
   html_document: default
 ---
-Executive Summary: Here is an example of artifical report for four treatments with two outcomes (outcome1, outcome2) measured on a scale ranging from 70 to 100.  I also analyzed how important factors to implementation such as fidelity (1 = 100% fidelity, 0 = less 100% fidelity) and whether no not a document was turned in on time (onTimeDoc: 1 = turned in documents on time 0 = did not) over 4 time points (fall, winter, spring, and summer).
+Here is an example of an artificial report for four treatment groups with two outcomes (outcome1, outcome2) measured on a scale ranging from 70 to 100.  I also analyzed how important factors to implementation of treatments such as fidelity (1 = 100% fidelity, 0 = less than 100% fidelity) and whether or not a document was turned in on time (onTimeDoc: 1 = turned in documents on time 0 = did not) over 4 time points (fall, winter, spring, and summer).
 
-Additionally, I calculated costs analysis to evaluate how income, costs, and revenue (income - costs) on a monthly basis.
+Additionally, I included a costs analysis to evaluate how income, costs, and revenue (income - costs) changed on a monthly basis for the implementation of the treatments.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(Hmisc)
 library(dplyr)
@@ -50,7 +50,7 @@ datMonthly$costsChange = round(Delt(datMonthly$costs),2)
 datMonthly$incomeChange = round(Delt(datMonthly$income),2)
 colnames(datMonthly) = c("costs","income", "revenues", "peopleServed","time", "costChange", "incomeChange")
 ```
-Below are the income, costs, and revenue graphs.  As the reader can see incomes are close to costs indicating that costs are generally being covered.
+Below are the income, costs, and revenues over time (i.e. months) graphs.  As the reader can see income is close to costs indicating that costs are generally being covered.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 theme_set(theme_grey(base_size = 13))
 p = ggplot(datMonthly, aes(x = time))
@@ -81,7 +81,7 @@ p = p + scale_y_continuous(labels = scales::dollar)
 p = p+ggtitle("Change in Revenue Over Time"); p
 
 ```
-The graphs below are displaying the average scores for outcomes one and two, fidelity (percentage of 100% fidelity), and percentage of times delievered documents on time.  Overall, the average scores do not seem to change over time, indicating that treatments are not having the desired effect.  Both fidelity and percentage of documents turned in on time are around 70% indicating room for improvement.
+The graphs below are displaying the average scores for outcomes one and two, fidelity (percentage of 100% fidelity), and percentage of times documents were delivered on time per treatment over time.  Overall, the average scores over all of the treatments do not seem to change over time, indicating that treatments are not having the desired effect.  Both fidelity and percentage of documents turned in on time for all treatments over time are around 70% indicating room for improvement.
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 datTimeAgg = round(aggregate(dat, list(dat$time), mean),2)
 datTimeAgg$outcome1Change = Delt(datTimeAgg$outcome1)
@@ -94,7 +94,7 @@ p = p+labs(y = "Outcomes 1 & 2")
 p = p +expand_limits(y = c(70, 100))
 p = p+ggtitle("Outcomes 1 and 2 Over Time");p
 ```
-Outcomes 1 and 2 Over Time Percentage change
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 theme_set(theme_grey(base_size = 13))
 p = ggplot(datTimeAgg, aes(x = time))
@@ -120,7 +120,7 @@ p = p+labs(y = "Outcome 1")
 p = p +expand_limits(y = c(70, 100))
 p = p+ggtitle("Outcomes 1 and 2 by Treatment over Time");p
 ```
-Fidelity over time by treatment
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 #Outcome 1 over time 
 theme_set(theme_grey(base_size = 13))
@@ -142,6 +142,3 @@ p = p +expand_limits(y = c(.25, 1))
 p = p + scale_y_continuous(labels = percent)
 p = p+ggtitle("% OnTimeDoc by Treatment over Time");p
 ```
-
-
-
